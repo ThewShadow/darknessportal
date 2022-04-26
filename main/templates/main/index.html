@@ -1,0 +1,40 @@
+{% extends "main/base.html" %}
+
+{% block title %}
+<title>
+  home
+</title>
+{% endblock %}
+
+{% block body %}
+<div>
+
+
+  <h4>
+    <a href="{% url 'album' %}">Новое в галереи</a>
+  </h4>
+  <div class="container">
+
+    {% if new_photos %}
+      {% for i in new_photos%}
+        <a style="margin-right: 11px" href="{% url 'photo_detail' i.id %}"><img src="{{ i.image.url }}" width="80px" height="80px">  </a>
+      {% endfor %}
+    {% endif %}
+  </div>
+  <br>
+  <h4>
+    Новые видео
+  </h4>
+  <div class="container">
+    {% if new_videos %}
+       {% for i in new_videos %}
+            <iframe width="560" height="315" src="{{ i.link }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe><br><br><br>
+       {% endfor %}
+    {% endif %}
+
+
+
+  </div>
+
+</div>
+{% endblock %}

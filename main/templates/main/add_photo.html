@@ -1,0 +1,17 @@
+{% extends "main/base.html" %}
+
+
+{% block title %}
+<title>
+    album
+</title>
+{% endblock %}
+
+{% block body %}
+
+    <form method="post" enctype="multipart/form-data">
+         {% csrf_token %}
+        <input type="file" name="Image">
+        <button type="submit">Add</button>
+    </form>
+{% endblock %}
