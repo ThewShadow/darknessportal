@@ -8,11 +8,27 @@
 {% endblock %}
 
 {% block body %}
-    <div class="container">
-        {% if detail %}
-        <img class="rounded" width="100%" height="80%" src="{{ detail.image.url }}">
+     {% if detail %}
+        <div class="text-muted container">
+            <p>{{ detail.author }}: {{ detail.pub_date }}</p>
+        </div>
+        <div class="container">
+            <img class="rounded" width="100%" height="650px" src="{{ detail.image.url }}">
+        </div>
+    {% endif %}
+
+    <div class="container text-center">
+        {% if prev_link %}
+        <a href="{% url 'albumphoto' prev_link.id %}">
+           prev
+        </a>
+        {% endif %}
+        -
+        {% if next_link %}
+        <a href="{% url 'albumphoto' next_link.id %}">
+           next
+        </a>
         {% endif %}
     </div>
-
 
 {% endblock %}

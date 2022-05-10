@@ -1,0 +1,30 @@
+{% extends "main/base.html" %}
+
+
+{% block title %}
+<title>
+    album
+</title>
+{% endblock %}
+
+{% block body %}
+    <h3 class="text-muted">Регистрация</h3>
+
+    {% if messages %}
+        {% for msg in messages %}
+            <span>{{ msg }}</span>
+        {% endfor %}
+    {% endif %}
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form  }}
+        <button type="submit">Регистрация</button>
+
+
+
+    </form>
+
+
+
+
+{% endblock %}

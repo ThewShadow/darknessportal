@@ -7,34 +7,59 @@
 {% endblock %}
 
 {% block body %}
-<div>
+<div class="container">
+  <div class="row">
+    <div class="col-7 ">
+      <div class="container">
+          <h4 class="text-muted">
+            <a href="{% url 'album/list' 1 %}">Новое в галереи</a>
+          </h4>
+          {% if new_photos %}
+            {% for i in new_photos%}
+            <a style="margin-right: 11px" href="{% url 'albumphoto' i.id %}">
+              <img class="active-block" src="{{ i.image.url }}" width="80px" height="80px">
+            </a>
+          {% endfor %}
+        {% endif %}
+      </div>
+      <div class="container">
+          <h4 class="text-muted">
+            Новые видео
+          </h4>
+          {% if new_videos %}
+             {% for i in new_videos %}
+                <iframe width="560" height="315" src="{{ i.link }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe><br><br><br>
+             {% endfor %}
+          {% endif %}
+      </div>
+    </div>
+    <div class="col-5">
+      <div class="container">
+          {% if is_authorizate %}
+              <h4 class="text-muted text-center">Чат</h4>
 
+              <div class="chat-window" id="chat">
 
-  <h4>
-    <a href="{% url 'album' %}">Новое в галереи</a>
-  </h4>
-  <div class="container">
+              </div>
 
-    {% if new_photos %}
-      {% for i in new_photos%}
-        <a style="margin-right: 11px" href="{% url 'photo_detail' i.id %}"><img src="{{ i.image.url }}" width="80px" height="80px">  </a>
-      {% endfor %}
-    {% endif %}
+              <div style="margin-left: 40px;" class="container" >
+
+                  <form method="post" id="comment_form">
+                    {% csrf_token %}
+                      <textarea id="user_message" class="darkback text-muted" type="input" name="user_message">
+
+                      </textarea ><br>
+                       <div onclick="send_message()"  class="btn btn-sm btn-outline-secondary">
+                          Отправить
+                      </div>
+                  </form>
+              </div>
+          {% endif %}
+      </div>
+    </div>
   </div>
-  <br>
-  <h4>
-    Новые видео
-  </h4>
-  <div class="container">
-    {% if new_videos %}
-       {% for i in new_videos %}
-            <iframe width="560" height="315" src="{{ i.link }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe><br><br><br>
-       {% endfor %}
-    {% endif %}
-
-
-
-  </div>
-
 </div>
+
+
 {% endblock %}
+

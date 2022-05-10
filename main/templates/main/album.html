@@ -8,47 +8,66 @@
 {% endblock %}
 
 {% block body %}
-<div class="album py-5  darkback">
-
-        <h3>
+<div class="album py-5">
+        <h3 class="text-muted text-center">
             ГАЛЕРЕЯ
         </h3>
-        <form class="container " method="get" action="{% url 'add_photo' %}">
-            <button class="btn" value="Add">
-                Add
-            </button>
-        </form>
+
         <br>
 
+        <div class="container">
 
-        <div class="container darkback">
+              <div class="row ">
+{% if all %}
+  {% for i in all %}
 
-          <div class="row">
-          {% if all %}
-              {% for i in all %}
-            <div class="col-md-4 darkback">
-              <div class="card mb-4 box-shadow darkback">
-                <img class="card-img-top"   style="height: 225px; width: 100%; display: block;"
-                     src="{{ i.image.url }}">
-                <div class="card-body">
+                    <div class="col-md-4  ">
+                        <div class="card mb-4 box-shadow darkback">
+                              <a class="" href="{% url 'albumphoto' i.id %}">
+                                <img class="card-img-top active-block"   style="height: 225px; width: 100%; display: block;"
+                                     src="{{ i.image.url }}">
+                              </a>
 
-                  <div class="d-flex justify-content-between align-items-center darkback">
-                    <div class="btn-group">
-                      <a href="{% url 'photo_detail' i.id %}">
-                          <button type="button" class="btn btn-sm btn-outline-secondary">
-                              View
-                          </button>
-                      </a>
+                              <div class="card-body">
+                                  <div class="d-flex justify-content-between align-items-center darkback">
+                                        <div class="btn-group">
+                                        <a href="{% url 'albumphoto' i.id %}">
+                                            <button type="button" class="btn btn-sm btn-outline-secondary">
+                                              View
+                                        </button></a>
+                                            <small class="text-muted">{{ i.pub_date}}</small>
+                                            <small class="text-muted">{{ i.author}}</small>
+                                        </div>
+                                  </div>
+                              </div>
+                        </div>
                     </div>
-                    <small class="text-muted">{{ i.pub_date}}</small>
-                    <small class="text-muted">{{ i.author}}</small>
-                  </div>
-                </div>
-              </div>
+
+  {% endfor %}
+{% endif %}
             </div>
-              {% endfor %}
-          {% endif %}
+
+    </div>
+    <nav class="container text-center">
+        <div class="">
+            <span class="">
+                {% if all.has_previous %}
+                    <a href="{% url 'album/list' 1 %}">&laquo; first</a>
+                    <a href="{% url 'album/list' all.previous_page_number %}">previous</a>
+                {% endif %}
+
+                <span class="">
+                    Page {{ all.number }} of {{ all.paginator.num_pages }}.
+                </span>
+
+                {% if all.has_next %}
+                    <a href="{% url 'album/list' all.next_page_number %}">next</a>
+                    <a href="{% url 'album/list'  all.paginator.num_pages %}">last &raquo;</a>
+                {% endif %}
+            </span>
         </div>
-      </div>
+    </nav>
+
+
 </div>
 {% endblock %}

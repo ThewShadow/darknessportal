@@ -8,57 +8,260 @@
 
 <style>
     body {
+        background-image: url(https://w0.peakpx.com/wallpaper/260/23/HD-wallpaper-depressive-forest-forest-depressive-dark-grey-black-night.jpg);
         color: white;
+
+        background-repeat: repeat-x;
+        background-attachment: fixed, fixed;
+         background-size: Contain;
+         width: 100%;
+         background-position: center center;
     }
 
     .darkback {
         background-color: black;
+
     }
 
     * {
         font-family: Times New Roman
     }
 
-    a.img:hover {
-        border: 4px double purple;
+
+    .active-block {
+        border: 1px solid transparent;
+        transition: 0.6s linear;
+    }
+
+    .active-block:hover {
+        border: 1px solid gray;
+
+    }
+
+    a {
+        color: grey;
+        text-decoration: none;
+        transition: 0.6s linear;
+    }
+    a:hover {
+        color: purple;
+        text-decoration: none;
+    }
+
+    .chat-window {
+        width: 100%;
+        height: 400px;
+
+        overflow-y: scroll;
+        padding: 10px;
+        margin: 40px;
+        overflow-x:hidden;  /*для горизонтального*/
+        scrollbar-color: #458245 #714826;     /* «цвет ползунка» «цвет полосы скроллбара» */
+        scrollbar-width: auto | thin | none;  /* толщина */
+    }
+
+    .chat_message_box {
+        font-size: 12px;
+        padding-top: 5px;
+        background: black;
+        opacity: 0.7;
+    }
+
+    ::-webkit-scrollbar {
+        width: 6px; /* ширина для вертикального скролла */
+        height: 8px; /* высота для горизонтального скролла */
+        background-color: black;
+    }
+
+    /* ползунок скроллбара */
+    ::-webkit-scrollbar-thumb {
+        background-color: gray;
+        border-radius: 9em;
+        box-shadow: inset 1px 1px 10px #f3faf7;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background-color: #253861;
     }
 </style>
 
+
 <body class="darkback">
     {% load static %}
-    <header class="darkback">
+    <header class="darkback" style="font-size: 22px;">
       <!-- Fixed navbar -->
-      <nav class="navbar navbar-expand-md navbar-dark fixed-top ">
-        <a style="color: blue;" class="navbar-brand" href="{% url 'home' %}">DARKNESS.UA</a>
+      <nav class="darkback navbar navbar-expand-md navbar-dark fixed-top ">
+        <a  href="{% url 'home' %}">DARKNESS.UA</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
        <div class="collapse navbar-collapse" id="navbarCollapse">
           <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="{% url 'home'  %}">Home <span class="sr-only">(current)</span></a>
+                <li class="nav-item">
+            <a class="nav-link">|</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'album' %}">Album</a>
+              <a class="nav-link" href="{% url 'home'  %}">Home <span class="sr-only">(current)</span></a>
+            </li>
+               <li class="nav-item">
+            <a class="nav-link">|</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'album/list' 1 %}">Album</a>
             </li>
 
+              {% if is_authorizate %}
+               <li class="nav-item">
+                <a class="nav-link">|</a>
+                </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'add_photo' %}">
+                    +Photo
+                </a>
+            </li>
+              {% endif %}
+            <li class="nav-item">
+            <a class="nav-link">|</a>
+            </li>
+
+              {% if is_authorizate %}
+               <li class="nav-item">
+                <span class="nav-link"> Account:
+                    <a style="color: purple;" href="{% url 'user_profile' user_id %}">{{ user_name }}</a> </span>
+               </li>
+
+                <li class="nav-item">
+                <a class="nav-link">|</a>
+                </li>
+             <li class="nav-item">
+                <a class="nav-link" href="{% url 'logout' %}">
+                    Logout
+                </a>
+              </li>
+                 {% else %}
+                <li class="nav-item">
+                 <a class="nav-link" href="{% url 'register' %}">
+                        Sign Up
+                    </a>
+                 </li>
+                    <li class="nav-item">
+                    <a class="nav-link">|</a>
+                    </li>
+                 <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}">
+                      Sign In
+                    </a>
+                </li>
+              {% endif %}
           </ul>
         </div>
       </nav>
     </header>
     <br>
+
     <!-- Begin page content -->
     <main style="margin-top: 60px;" role="main" class="container">
+            <div class="container">
+    {% if user_name %}
+
+
+    {% endif %}
+        </div>
       {% block body %} {% endblock %}
     </main>
 
     <footer class="footer">
       <div class="container">
-        <span class="text-muted">Place sticky footer content here.</span>
+        <span class="text-muted">Footer is dead</span>
       </div>
     </footer>
 
 
 </body>
 
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+<script type="text/javascript">
+
+      function scrollDown() {
+          var block = document.getElementById("chat");
+          block.scrollTop = block.scrollHeight;
+      }
+
+      function send_message() {
+        $.ajax({
+            headers: {"X-CSRFToken": "{{  csrf_token  }}"},
+            type: "POST",
+            url: 'http://127.0.0.1:1241/dark/',
+            data: {"user_message": $('#user_message').val()},
+            success: function (res) {
+              $("#comment_form").trigger('reset')
+              scrollDown()
+            }
+
+        })
+      }
+
+
+    function get_messages() {
+        $.ajax({
+          url: "messages/get",
+          success: function( json ) {
+
+            data = JSON.parse(json);
+            $( ".chat-window div" ).remove();
+            for (let i=0; i < data.length; i++) {
+
+                row = data[i];
+                html_data_other = ` <div class="col-7" > \
+                      <div class="container"> \
+                        <p> \
+                            <b><a style="color: red;" href="user/${row['id']}">${row['author_name']}</a></b>:${row['text']} \
+                        </p> \
+                      </div> \
+                  </div> \
+                  <div class="col-5"></div>`;
+
+                html_data_current = `<div class="col-5"></div> \
+                       <div class="col-7 text-right" > \
+                          <div class="container"> \
+                            <p> \
+                                <b><a style="color: red;" href="user/${row['id']}">${row['author_name']}</a>:</b>${row['text']} \
+                            </p> \
+                          </div> \
+                      </div> `;
+
+
+
+                html_row = '<div class=" row" style="margin-top: 1px;  word-break: break-all;">$DATA$</div>';
+
+                var res = ''
+
+                if (row.id == row.current_id) {
+                    res = html_row.replace('$DATA$',html_data_current);
+                } else {
+                    res = html_row.replace('$DATA$',html_data_other);
+                }
+
+                $('.chat-window').append(res);
+
+            }
+          }
+        })
+    }
+
+  $(document).ready(function () {
+    setInterval(get_messages, 1000)
+    scrollDown()
+  })
+
+
+</script>
+  <script>
+
+          </script>
+<script type="text/javascript">
+
+
+
+</script>
 </html>

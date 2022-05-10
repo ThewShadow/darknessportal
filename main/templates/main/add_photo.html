@@ -8,10 +8,18 @@
 {% endblock %}
 
 {% block body %}
+    <h3 class="text-muted">Вибери файл</h3>
 
     <form method="post" enctype="multipart/form-data">
-         {% csrf_token %}
-        <input type="file" name="Image">
+        {% csrf_token %}
+        {{ form.as_p  }}
         <button type="submit">Add</button>
+        {% if error_msg %}
+        <span>{{ error_msg }}</span>
+        {% endif %}
     </form>
+
+
+
+
 {% endblock %}

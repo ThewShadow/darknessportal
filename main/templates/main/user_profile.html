@@ -1,0 +1,45 @@
+{% extends "main/base.html" %}
+
+
+{% block title %}
+<title>
+    album
+</title>
+{% endblock %}
+
+{% block body %}
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-3">
+                {% if user_profile.profile_photo %}
+                <img width="250px" height="250px" src="{{ user_profile.profile_photo.url }}">
+                {% else %}
+                 <div class="bg-dark" style="width: 250px; height: 250px" src=""></div>
+                {% endif %}
+
+
+            </div>
+            <div class="col-6">
+                <h3 class="text-white"><span class="text-muted">name:</span> {{ user_profile.name }}</h3>
+                 <h4 class="text-white"><span class="text-muted">id:</span> {{ user_profile.id }}</h4>
+                 <h4 class="text-white"><span class="text-muted">reg-date:</span> {{ user_profile.registration_date }}</h4>
+                 <h4 class="text-white"><span class="text-muted">messages:</span> {{ user_profile.messages_count }}</h4>
+
+
+                <h4 class="text-white"><span class="text-muted">gender:</span> {{ user_profile.gender }}</h4>
+                    <br>
+                <p><span class="text-muted">О себе:</span> {{ user_profile.title }}</p>
+
+            </div>
+        </div>
+        <div class="row">
+
+        </div>
+    </div>
+
+    
+
+
+
+{% endblock %}
