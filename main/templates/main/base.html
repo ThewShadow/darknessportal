@@ -187,11 +187,14 @@
           block.scrollTop = block.scrollHeight;
       }
 
+      url_elements = window.location.href.split('/');
+      root_url = url_elements[0] + '//' + url_elements[2] + '/' + url_elements[3] + '/'
+
       function send_message() {
         $.ajax({
             headers: {"X-CSRFToken": "{{  csrf_token  }}"},
             type: "POST",
-            url: 'http://127.0.0.1:1241/dark/',
+            url: root_url,
             data: {"user_message": $('#user_message').val()},
             success: function (res) {
               $("#comment_form").trigger('reset')
