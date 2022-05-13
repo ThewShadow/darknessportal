@@ -17,7 +17,7 @@
           {% if new_photos %}
             {% for i in new_photos%}
             <a style="margin-right: 11px" href="{% url 'albumphoto' i.id %}">
-              <img class="active-block" src="{{ i.image.url }}" width="80px" height="80px">
+              <img  class="active-block" src="{{ i.image.url }}" width="80px" height="80px">
             </a>
           {% endfor %}
         {% endif %}
@@ -46,9 +46,7 @@
 
                   <form method="post" id="comment_form">
                     {% csrf_token %}
-                      <textarea id="user_message" class="darkback text-muted" type="input" name="user_message">
-
-                      </textarea ><br>
+                      <textarea id="user_message" class="darkback text-muted" type="input" name="user_message"></textarea ><br>
                        <div onclick="send_message()"  class="btn btn-sm btn-outline-secondary">
                           Отправить
                       </div>
@@ -61,5 +59,10 @@
 </div>
 
 
+
+
+<script>
+
+</script>
 {% endblock %}
 

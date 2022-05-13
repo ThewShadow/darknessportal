@@ -8,6 +8,8 @@ from main.views import AlbumView
 from main.views import AddImageView
 from main.views import get_messages
 from main.views import UserDetail
+from main.views import UserEditDetail
+
 
 urlpatterns = [
     path('', IndexView.as_view(), name='home'),
@@ -19,5 +21,5 @@ urlpatterns = [
     path('logout/', logout, name='logout'),
     path('messages/get', get_messages),
     path('user/<int:id>', UserDetail.as_view(), name='user_profile'),
-
+    path('user/update/<int:pk>/', UserEditDetail.as_view(), name='update_profile')
 ]

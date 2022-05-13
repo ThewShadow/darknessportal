@@ -13,7 +13,7 @@
         <div class="row">
             <div class="col-3">
                 {% if user_profile.profile_photo %}
-                <img width="250px" height="250px" src="{{ user_profile.profile_photo.url }}">
+                <img id="avatar" width="250px" height="250px" src="{{ user_profile.profile_photo.url }}">
                 {% else %}
                  <div class="bg-dark" style="width: 250px; height: 250px" src=""></div>
                 {% endif %}
@@ -31,6 +31,13 @@
                     <br>
                 <p><span class="text-muted">О себе:</span> {{ user_profile.title }}</p>
 
+            </div>
+            <div class="col-3">
+                {% if is_authorizate%}
+                <a class="btn text-white btn-sm btn-outline-secondary" href="{% url 'update_profile' user_profile.id %}">
+                    change info
+                </a>
+                {% endif %}
             </div>
         </div>
         <div class="row">

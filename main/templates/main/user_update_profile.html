@@ -1,0 +1,39 @@
+{% extends "main/base.html" %}
+
+
+{% block title %}
+<title>
+    album
+</title>
+{% endblock %}
+
+{% block body %}
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-3">
+
+
+
+            </div>
+            <div class="col-6">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+
+                    <input class="btn text-white btn-sm btn-outline-secondary" type="submit" name="" value="save">
+
+                </form>
+
+            </div>
+        </div>
+        <div class="row">
+
+        </div>
+    </div>
+
+    
+
+
+
+{% endblock %}

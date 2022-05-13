@@ -7,13 +7,14 @@ from .models import Video
 from django.core import paginator
 from django.db.models import Q
 from django.shortcuts import redirect, reverse
-from django.views.generic import ListView, DetailView, TemplateView, CreateView
+from django.urls import reverse_lazy, reverse
+from django.views.generic import ListView, DetailView, TemplateView, CreateView, UpdateView, FormView
 from .models import Message
 from .models import User
-from .forms import ImageForm, NewUserForm, LoginForm, MessageForm
+from .forms import ImageForm, NewUserForm, LoginForm, MessageForm, UserForm
 from django.contrib.auth import login as login1, authenticate #add this
 from django.contrib import messages
-from django.contrib.auth.forms import AuthenticationForm #add this
+from django.forms.models import model_to_dict
 import json
 
 
@@ -33,9 +34,12 @@ class CommonContextMixin:
         context['new_videos'] = new_videos
         context['messages'] = messages
         context['timeformat'] = time.strftime
-        context['user_id'] = request.session.get('user_id')
-        context['user_name'] = request.session.get('user_name')
-        context['is_authorizate'] = request.session.get('is_authorizate')
+        context['user_id'] = request.session.get('user_id', 0)
+        context['user_name'] = request.session.get('user_name', '')
+        context['is_authorizate'] = request.session.get('is_authorizate', False)
+
+        if context['user_id']:
+            context['avatar'] = User.objects.get(id=context['user_id']).profile_photo
 
         return context
 
@@ -213,8 +217,22 @@ def get_messages(request):
 class UserDetail(CommonContextMixin, DetailView):
     template_name = 'main/user_profile.html'
     model = User
+
     context_object_name = 'user_profile'
+
     def get_object(self, queryset=None):
         id = self.kwargs.get('id', 0)
         return get_object_or_404(User, id=id)
+
+
+class UserEditDetail(CommonContextMixin, UpdateView):
+    template_name = 'main/user_update_profile.html'
+    model = User
+    fields = ('name', 'title', 'profile_photo')
+
+    def get_success_url(self):
+        user_id = self.request.session.get('user_id', 0)
+        return reverse('user_profile', kwargs={'id':user_id})
+
+
 

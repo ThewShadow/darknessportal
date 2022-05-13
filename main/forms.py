@@ -38,3 +38,7 @@ class MessageForm(ModelForm):
         model = Message
         fields = {'author', 'text', 'pub_date'}
 
+class UserForm(ModelForm):
+    class Meta:
+        model = User
+        fields = ('profile_photo', 'title', 'gender', 'email')
