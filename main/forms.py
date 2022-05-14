@@ -1,3 +1,5 @@
+import re
+
 from .models import Image
 from django import forms
 from django.forms import ModelForm, DateTimeInput, TextInput
@@ -41,4 +43,16 @@ class MessageForm(ModelForm):
 class UserForm(ModelForm):
     class Meta:
         model = User
-        fields = ('profile_photo', 'title', 'gender', 'email')
+        fields = ('profile_photo', 'title', 'gender', 'email', 'text_color')
+
+
+    def save(self, commit=True):
+        inst = super().save(commit=False)
+        inst.title = clear_html_tags(inst.title)
+        inst.email = clear_html_tags(inst.title)
+        inst.save()
+        return inst
+
+def clear_html_tags(html):
+    CLEANR = re.compile('<.*?>')
+    return re.sub(CLEANR, '', html)

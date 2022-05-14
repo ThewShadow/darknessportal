@@ -1,3 +1,4 @@
+import re
 import time
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
@@ -16,10 +17,8 @@ from django.contrib.auth import login as login1, authenticate #add this
 from django.contrib import messages
 from django.forms.models import model_to_dict
 import json
+from datetime import datetime
 
-
-def time_format(value, format="%H:%M"):
-    return value.strftime(format)
 
 
 class CommonContextMixin:
@@ -61,7 +60,10 @@ class IndexView(CommonContextMixin, ListView):
         text_msg = request.POST.get('user_message')
         usr_id = request.session.get('user_id', 0)
         usr = get_object_or_404(User, id=usr_id)
-        form = MessageForm({'author': usr, 'text': text_msg, 'pub_date': datetime.datetime.now().time()})
+
+        text_msg = clear_html_tags(text_msg)
+
+        form = MessageForm({'author': usr, 'text': text_msg, 'pub_date': datetime.now().time()})
         if form.is_valid():
             form.save()
         return redirect('home')
@@ -146,13 +148,24 @@ def make_pagination_links(obj):
     return dict(prev_link=prev, next_link=next)
 
 
+def clear_html_tags(html):
+    CLEANR = re.compile('<.*?>')
+    return re.sub(CLEANR, '', html)
 
+def delete_html_from_data(data):
+    for key in data:
+        value = data[key.name].data
+        if type(value) == str:
+            setattr(data[key.name], 'data', clear_html_tags(value))
 
 def register(request):
     if request.method == "POST":
-        new_user = NewUserForm(request.POST)
+        name = clear_html_tags(request.POST.get('name', ''))
+        pswd = clear_html_tags(request.POST.get('password', ''))
+
+        new_user = NewUserForm(dict(name=name, password=pswd))
         try:
-            usr = User.objects.get(name=new_user['name'].value())
+            usr = User.objects.get(name=name)
             messages.error(request, 'User exist, try other name')
         except Exception as e:
             if new_user.is_valid():
@@ -200,18 +213,21 @@ def logout(request):
 
 def get_messages(request):
 
-    users_message = Message.objects.order_by('-pub_date')[:20]
+    users_message = Message.objects.order_by('pub_date')[:20]
     usr_id = request.session.get('user_id', '')
     if not usr_id:
         return JsonResponse('[]', safe=False)
+
+
     def to_dict(inst):
         return dict(author_name=inst.author.name,
                     text=inst.text,
                     id=inst.author.id,
-                    current_id=usr_id)
+                    current_id=usr_id,
+                    pub_date=str(inst.pub_date),
+                    text_color=inst.author.text_color)
 
     res = list(map(to_dict, list(users_message)))
-    res.reverse()
     return JsonResponse(json.dumps(res), safe=False)
 
 class UserDetail(CommonContextMixin, DetailView):
@@ -228,11 +244,13 @@ class UserDetail(CommonContextMixin, DetailView):
 class UserEditDetail(CommonContextMixin, UpdateView):
     template_name = 'main/user_update_profile.html'
     model = User
-    fields = ('name', 'title', 'profile_photo')
-
+    #fields = ('name', 'title', 'profile_photo')
+    form_class = UserForm
     def get_success_url(self):
         user_id = self.request.session.get('user_id', 0)
         return reverse('user_profile', kwargs={'id':user_id})
+
+
 
 
 

@@ -18,6 +18,13 @@ class User(models.Model):
     registration_date = models.DateField(null=True, blank=True)
     title = models.CharField(max_length=150, null=True, blank=True)
 
+    text_color_chices = (
+        ('lime', 'lime'),
+        ('crimson', 'crimson'),
+        ('cyan', 'cyan'),
+    )
+
+    text_color = models.CharField(max_length=20, choices=text_color_chices, default='crimson')
 
     def check_password(self, check_pass):
         return self.password == check_pass

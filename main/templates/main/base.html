@@ -314,7 +314,7 @@
                 html_data_other = ` <div class="col-7" > \
                       <div class="container"> \
                         <p> \
-                            <b><a style="color: mediumorchid;" href="user/${row['id']}">${row['author_name']}</a></b>:${row['text']} \
+                            <b><a style="color: mediumorchid;" href="user/${row['id']}">${row['author_name']}</a></b>:<span style="color: ${row['text_color']};">${row['text']}</span>\
                         </p> \
                       </div> \
                   </div> \
@@ -324,7 +324,7 @@
                        <div class="col-7 text-right" > \
                           <div class="container"> \
                             <p> \
-                                <b><a style="color: mediumorchid;" href="user/${row['id']}">${row['author_name']}</a>:</b>${row['text']} \
+                                <b><a style="color: mediumorchid;" href="user/${row['id']}">${row['author_name']}</a>:</b><span style="color: ${row['text_color']};">${row['text']}</span>\
                             </p> \
                           </div> \
                       </div> `;
